@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WebSocket demo</title>
+    </head>
+    <body>
+        <script>
+            var _websocket;
+
+            function wsConnect() {
+                if (_websocket) {
+                    _websocket.close(3001);
+                } else {
+                    _websocket = new WebSocket("ws://127.0.0.1:8091/");
+                    _websocket.onopen = function() {
+                        console.log('connected');
+                    };
+                    _websocket.onmessage = function(msg) {
+                        console.log(msg);
+                    };
+
+                    _websocket.onclose = function(evt) {
+                        if (evt.code == 3001) {
+                            console.log('ws closed');
+                            _websocket = null;
+                        } else {
+                            _websocket = null;
+                            console.log('ws connection error');
+                        }
+                    };
+
+                    _websocket.onerror = function(evt) {
+                        if (_websocket.readyState == 1) {
+                            console.log('ws normal error: ' + evt.type);
+                        }
+                    };
+                }
+            }
+
+            wsConnect();
+        </script>
+    </body>
+</html>

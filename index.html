@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--Import Google Icon Font-
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+-->
+<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+<!--Let browser know website is optimized for mobile-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<style>
+/* fallback */
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Material Icons'), local('MaterialIcons-Regular'), url('fonts/icons.woff2') format('woff2');
+}
+
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+</style>
+
+</head>
+
+<body class="grey lighten-4">
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+
+
+
+    <nav class="nav-extended">
+        <div class="nav-content">
+            <ul class="tabs tabs-transparent">
+                <li class="tab disabled" id="tab-status"><a class="active" href="#status">Status</a></li>
+                <li class="tab disabled" id="tab-control"><a href="#control">Control</a></li>
+                <li class="tab disabled" id="tab-configuration"><a href="#configuration">Configuration</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="loading-indicator">
+    <br />
+    <h5 class="center-align grey-text">Connecting to AcapellaBot...</h5>
+    <br />
+    <h5 class="center-align">
+        <div class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-red-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <br />
+            <a class="waves-effect waves-light btn" id="reconnect-btn"><i class="material-icons right">autorenew</i>Reinitiate</a>
+        </div>
+    </h5>
+    </div>
+
+
+
+    <div class="hide" id="main-content">
+
+        <div id="status" class="col s12">
+
+            <div class="collection">
+
+                <li class="collection-item">
+                    <span class="badge green-text">
+                        <div class="switch">
+                            <label>
+                                Config
+                                <input type="checkbox" id="main-mode-status">
+                                <span class="lever"></span>
+                                Interaction
+                            </label>
+                        </div>
+                    </span>
+                    Mode
+                </li>
+
+            </div>
+
+            <div class="collection">
+
+                <li class="collection-item">
+                    <span class="badge red-text" id="realsense-state">Disconnected</span>
+                    Realsense
+                </li>
+
+                <li class="collection-item">
+                    <span class="badge red-text" id="serial-state">Disconnected</span>
+                    Serial Port
+                </li>
+
+                <li class="collection-item">
+                    <span class="badge red-text" id="audioin-state">Silent</span>
+                    Audio Input
+                </li>
+
+                <li class="collection-item">
+                    <span class="new badge" data-badge-caption=""><a href="#!" class="white-text" id="test-audio-output">Test</a></span>
+                    Audio Output
+                </li>
+
+                <li class="collection-item">
+                    <span class="badge red-text" id="baton-state">Off</span>
+                    Baton
+                </li>
+
+            </div>
+
+            <div class="collection">
+
+                <li class="collection-item">
+                    <span class="badge">
+                        <span class="red-text" id="realsense-server-state">Offline</span>
+                        <a href="#!" class="" id="start-realsense"> Start</a>
+                    </span>
+                    Realsense-to-Serial Server
+                </li>
+
+                <li class="collection-item">
+                    <span class="badge">
+                        <span class="red-text" id="audio-analyzer-state">Offline</span>
+                        <a href="#!" class="" id="start-audioana"> Start</a>
+                    </span>
+                    Audio Analyzer
+                </li>
+
+                <li class="collection-item">
+                    <span class="badge">
+                        <span class="red-text" id="acapella-state">Offline</span>
+                        <a href="#!" class="" id="start-acapella"> Start</a>
+                    </span>
+                    Acapella Generator
+                </li>
+
+                <li class="collection-item">
+                    <span class="badge">
+                        <span class="red-text" id="baton-receiver-state">Offline</span>
+                        <a href="#!" class="" id="start-baton"> Start</a>
+                    </span>
+                    Baton Receiver
+                </li>
+            </div>
+
+            <div class="collection">
+                <li class="collection-item">
+                    <span class="badge" id="interaction-state">None</span>
+                    Current Interaction Stage
+                </li>
+            </div>
+        </div>
+
+        <div id="control" class="col s12">
+
+            <div class="collection">
+
+                <li class="collection-item">
+                    <span class="badge">
+                        <div class="switch">
+                            <label>
+                                Config
+                                <input type="checkbox" id="main-mode-control">
+                                <span class="lever"></span>
+                                Interaction
+                            </label>
+                        </div>
+                    </span>
+                    Mode
+                </li>
+
+            </div>
+
+            <div class="collection">
+
+                <li class="collection-item">
+                    <span class="badge">
+                        <div class="switch">
+                            <label>
+                                <input type="checkbox" id="interactions-toggle" checked>
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </span>
+                    Interactions
+                </li>
+
+                <li class="collection-item">
+                    <span class="badge">
+                        <div class="switch">
+                            <label>
+                                <input type="checkbox" id="roaming-toggle" checked>
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </span>
+                    Roaming
+                </li>
+
+                <li class="collection-item">
+                    <span class="badge">
+                        <div class="switch">
+                            <label>
+                                <input type="checkbox" id="face-toggle" checked>
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </span>
+                    Face Recognition
+                </li>
+
+                <li class="collection-item">
+                    <span class="badge">
+                        <div class="switch">
+                            <label>
+                                <input type="checkbox" id="songs-toggle" checked>
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </span>
+                    Prepared Songs
+                </li>
+
+                <li class="collection-item">
+                    <span class="badge">
+                        <div class="switch">
+                            <label>
+                                <input type="checkbox" id="acapella-toggle" checked>
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </span>
+                    Acapella
+                </li>
+
+                <li class="collection-item">
+                    <span class="badge">
+                        <div class="switch">
+                            <label>
+                                <input type="checkbox" id="conducting-toggle" checked>
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </span>
+                    Conducting
+                </li>
+
+            </div>
+
+            <div class="collection">
+
+                <li class="collection-item">
+                    <span class="badge">
+                        <div class="switch">
+                            <label>
+                                <input type="checkbox" checked>
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </span>
+                    <span class="new badge" data-badge-caption=""><a href="#!" class="white-text">Jump To</a></span>
+                    Stage 1
+                </li>
+
+                <li class="collection-item">
+                    <span class="badge">
+                        <div class="switch">
+                            <label>
+                                <input type="checkbox" checked>
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </span>
+                    <span class="new badge" data-badge-caption=""><a href="#!" class="white-text">Jump To</a></span>
+                    Stage 2
+                </li>
+
+                <li class="collection-item">
+                    <span class="badge">
+                        <div class="switch">
+                            <label>
+                                <input type="checkbox" checked>
+                                <span class="lever"></span>
+                            </label>
+                        </div>
+                    </span>
+                    <span class="new badge" data-badge-caption=""><a href="#!" class="white-text">Jump To</a></span>
+                    Stage 3
+                </li>
+
+            </div>
+
+        </div>
+        <div id="configuration" class="col s12">Configuration</div>
+    </div>
+
+    <script>
+
+        //=============[Utility Functions]===========
+        function applyStatusData(data) {
+            if (data.mode == "config") {
+                $("#main-mode-status").prop("checked", false);
+                $("#main-mode-control").prop("checked", false);
+            } else if (data.mode == "interaction") {
+                console.log(data.mode);
+                $("#main-mode-status").prop("checked", true);
+                $("#main-mode-control").prop("checked", true);
+            }
+
+            if (data.realsense) {
+                $("#realsense-state").text("Connected");
+                $("#realsense-state").removeClass("red-text");
+                $("#realsense-state").addClass("green-text");
+            } else {
+                $("#realsense-state").text("Disconnected");
+                $("#realsense-state").removeClass("green-text");
+                $("#realsense-state").addClass("red-text");
+            }
+
+            if (data.serial) {
+                $("#serial-state").text("Connected");
+                $("#serial-state").removeClass("red-text");
+                $("#serial-state").addClass("green-text");
+            } else {
+                $("#serial-state").text("Disconnected");
+                $("#serial-state").removeClass("green-text");
+                $("#serial-state").addClass("red-text");
+            }
+
+            if (data.audio_in) {
+                $("#audioin-state").text("OK");
+                $("#audioin-state").removeClass("red-text");
+                $("#audioin-state").addClass("green-text");
+            } else {
+                $("#audioin-state").text("Silent");
+                $("#audioin-state").removeClass("green-text");
+                $("#audioin-state").addClass("red-text");
+            }
+
+            if (data.baton) {
+                $("#baton-state").text("On");
+                $("#baton-state").removeClass("red-text");
+                $("#baton-state").addClass("green-text");
+            } else {
+                $("#baton-state").text("Off");
+                $("#baton-state").removeClass("green-text");
+                $("#baton-state").addClass("red-text");
+            }
+
+            if (data.realsense_serial) {
+                $("#realsense-server-state").text("Online");
+                $("#realsense-server-state").removeClass();
+                $("#realsense-server-state").addClass("green-text");
+                $("#start-realsense").addClass("hide");
+            } else {
+                $("#realsense-server-state").text("Offline");
+                $("#realsense-server-state").removeClass("green-text");
+                $("#realsense-server-state").addClass("red-text");
+                $("#start-realsense").removeClass("hide");
+            }
+
+            if (data.audio_analyzer) {
+                $("#audio-analyzer-state").text("Online");
+                $("#audio-analyzer-state").removeClass();
+                $("#audio-analyzer-state").addClass("green-text");
+                $("#start-audioana").addClass("hide");
+            } else {
+                $("#audio-analyzer-state").text("Offline");
+                $("#audio-analyzer-state").removeClass("green-text");
+                $("#audio-analyzer-state").addClass("red-text");
+                $("#start-audioana").removeClass("hide");
+            }
+
+            if (data.acapella) {
+                $("#acapella-state").text("Online");
+                $("#acapella-state").removeClass();
+                $("#acapella-state").addClass("green-text");
+                $("#start-acapella").addClass("hide");
+            } else {
+                $("#acapella-state").text("Offline");
+                $("#acapella-state").removeClass("green-text");
+                $("#acapella-state").addClass("red-text");
+                $("#start-acapella").removeClass("hide");
+            }
+
+            if (data.baton_recv) {
+                $("#baton-receiver-state").text("Online");
+                $("#baton-receiver-state").removeClass();
+                $("#baton-receiver-state").addClass("green-text");
+                $("#start-baton").addClass("hide");
+            } else {
+                $("#baton-receiver-state").text("Offline");
+                $("#baton-receiver-state").removeClass("green-text");
+                $("#baton-receiver-state").addClass("red-text");
+                $("#start-baton").removeClass("hide");
+            }
+        }
+
+        var websocket;
+
+        function wsConnect() {
+            if (websocket) {
+                websocket.close(1000);
+            } else {
+                websocket = new WebSocket("ws://127.0.0.1:8091/");
+                websocket.onopen = function() {
+                    console.log('connected');
+                    $("#loading-indicator").addClass("hide");
+                    $("#main-content").removeClass("hide");
+                    $("#tab-status").removeClass("disabled");
+                    $("#tab-control").removeClass("disabled");
+                    $("#tab-configuration").removeClass("disabled");
+                };
+
+                websocket.onmessage = function(msg) {
+                    data = JSON.parse(msg.data)
+                    console.log(data);
+                    if (data.type == "status") {
+                        applyStatusData(data);
+                    }
+                };
+
+                websocket.onclose = function(evt) {
+                    if (evt.code == 1000) {
+                        console.log('ws closed');
+                        websocket = null;
+                    } else {
+                        websocket = null;
+                        console.log('Error connecting to AcapellaBot');
+                    }
+                };
+
+                websocket.onerror = function(evt) {
+                    if (websocket.readyState == 1) {
+                        console.log('ws normal error: ' + evt.type);
+                    }
+                };
+            }
+        }
+
+
+        //=============[Loading Page]================
+
+        wsConnect();
+
+        $("#reconnect-btn").click(function () {
+            //Re-initiate connection here.
+            wsConnect();
+
+        })
+
+
+        //=============[Control Tab]===============
+
+        $("#main-mode-status").click(function () {
+            //toggle mode here.
+            cmd = {
+                type: "cmd",
+                cmd: "set-mode",
+                value: $("#main-mode-status").prop("checked") ? "interaction" : "config"
+            }
+            websocket.send(JSON.stringify(cmd));
+            $("#main-mode-control").prop("checked", $("#main-mode-status").prop("checked"));
+        })
+
+        $("#test-audio-output").click(function () {
+            //test audio output here.
+            cmd = {
+                type: "cmd",
+                cmd: "test-audio-output"
+            }
+            websocket.send(JSON.stringify(cmd));
+        })
+
+        $("#start-realsense").click(function () {
+            //start realsense here.
+            $("#start-realsense").addClass("hide");
+            $("#realsense-server-state").text("Starting...");
+
+            cmd = {
+                type: "cmd",
+                cmd: "start-realsense"
+            }
+            websocket.send(JSON.stringify(cmd));
+        })
+
+        $("#start-audioana").click(function () {
+            //start audio analyzer here.
+            $("#start-audioana").addClass("hide");
+            $("#audio-analyzer-state").text("Starting...");
+
+            cmd = {
+                type: "cmd",
+                cmd: "start-audioana"
+            }
+            websocket.send(JSON.stringify(cmd));
+        })
+
+        $("#start-acapella").click(function () {
+            //start acapella generator here.
+            $("#start-acapella").addClass("hide");
+            $("#acapella-state").text("Starting...");
+
+            cmd = {
+                type: "cmd",
+                cmd: "start-acapella"
+            }
+            websocket.send(JSON.stringify(cmd));
+        })
+
+        $("#start-baton").click(function () {
+            //start baton receiver here.
+            $("#start-baton").addClass("hide");
+            $("#baton-receiver-state").text("Starting...");
+
+            cmd = {
+                type: "cmd",
+                cmd: "start-baton"
+            }
+            websocket.send(JSON.stringify(cmd));
+        })
+
+        //=============[Control Tab]===============
+
+        $("#main-mode-control").click(function () {
+            //toggle mode here.
+            cmd = {
+                type: "cmd",
+                cmd: "set-mode",
+                value: $("#main-mode-control").prop("checked") ? "interaction" : "config"
+            }
+            websocket.send(JSON.stringify(cmd));
+
+            $("#main-mode-status").prop("checked", $("#main-mode-control").prop("checked"));
+        })
+
+        $("#interactions-toggle").click(function () {
+            //toggle interactions here.
+            cmd = {
+                type: "cmd",
+                cmd: "interactions-toggle",
+                value: $("#interactions-toggle").prop("checked")
+            }
+            websocket.send(JSON.stringify(cmd));
+        })
+
+        $("#roaming-toggle").click(function () {
+            //toggle roaming here.
+            cmd = {
+                type: "cmd",
+                cmd: "roaming-toggle",
+                value: $("#roaming-toggle").prop("checked")
+            }
+            websocket.send(JSON.stringify(cmd));
+        })
+
+        $("#face-toggle").click(function () {
+            //toggle face recognition here.
+            cmd = {
+                type: "cmd",
+                cmd: "face-toggle",
+                value: $("#face-toggle").prop("checked")
+            }
+            websocket.send(JSON.stringify(cmd));
+        })
+
+        $("#songs-toggle").click(function () {
+            //toggle prepared songs here.
+            cmd = {
+                type: "cmd",
+                cmd: "songs-toggle",
+                value: $("#songs-toggle").prop("checked")
+            }
+            websocket.send(JSON.stringify(cmd));
+        })
+
+        $("#acapella-toggle").click(function () {
+            //toggle acapella here.
+            cmd = {
+                type: "cmd",
+                cmd: "acapella-toggle",
+                value: $("#acapella-toggle").prop("checked")
+            }
+            websocket.send(JSON.stringify(cmd));
+        })
+
+        $("#conducting-toggle").click(function () {
+            //toggle conducting here.
+            cmd = {
+                type: "cmd",
+                cmd: "conducting-toggle",
+                value: $("#conducting-toggle").prop("checked")
+            }
+            websocket.send(JSON.stringify(cmd));
+        })
+
+    </script>
+
+
+</body>
+</html>
